@@ -334,6 +334,7 @@
           <p class="form-error" id="err-2">That code doesn't match. Check the hint above and try again.</p>
           <button class="btn-primary btn-block" style="margin-top:18px;" onclick="verifyOtp()">Verify &amp; confirm booking</button>
           <div style="text-align:center; margin-top:14px;"><button class="btn-link-inline" onclick="backToDetails()">← Edit details</button></div>
+          <div style="text-align:center; margin-top:10px;"><button class="btn-link-inline" style="color:var(--marigold-deep);" onclick="skipOtpForTesting()">⚠️ Skip verification (testing only — remove before launch)</button></div>
         </div>
 
         <div id="step-3" style="display:none;">
@@ -574,6 +575,22 @@
     document.getElementById('step-2').style.display = 'none';
     document.getElementById('step-1').style.display = 'block';
     document.getElementById('prog-2').classList.remove('done');
+  }
+
+  // TEMPORARY — for testing only while MSG91 KYC is pending. Remove this function
+  // and its button in step-2 before letting real customers use this app.
+  async function skipOtpForTesting(){
+    const booking = {
+      patientName: document.getElementById('patientName').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      city: document.getElementById('city').value,
+      service: document.getElementById('service').value,
+      hospital: document.getElementById('hospital').value.trim() || 'Not specified',
+      visitDate: document.getElementById('visitDate').value || 'Not specified',
+      visitTime: document.getElementById('visitTime').value || 'Not specified'
+    };
+    await saveBooking(booking);
+    showConfirmation(booking);
   }
 
   function verifyOtp(){
